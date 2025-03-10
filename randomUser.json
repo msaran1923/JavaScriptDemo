@@ -1,0 +1,66 @@
+{
+    "results": [
+      {
+        "gender": "female",
+        "name": {
+          "title": "Ms",
+          "first": "Silje",
+          "last": "Thomsen"
+        },
+        "location": {
+          "street": {
+            "number": 9759,
+            "name": "Egeskovvej"
+          },
+          "city": "Ølstykke",
+          "state": "Nordjylland",
+          "country": "Denmark",
+          "postcode": 49192,
+          "coordinates": {
+            "latitude": "-46.7942",
+            "longitude": "159.4935"
+          },
+          "timezone": {
+            "offset": "+11:00",
+            "description": "Magadan, Solomon Islands, New Caledo"
+          }
+        },
+        "email": "silje.thomsen@example.com",
+        "login": {
+          "uuid": "dffff2f9-63de-4511-802c-67b7a881dffa",
+          "username": "smallgorilla521",
+          "password": "blue1",
+          "salt": "p26tgfHb",
+          "md5": "15c90b41d53e438e89cea59f77f96c4b",
+          "sha1": "484a9f5897fd7aff223f8a97c28a2099b49e0a85",
+          "sha256": "f494e363fff7f30c10e55bcda0e21d8c1d12bed453d4d0640bb15a09e5b7fe66"
+        },
+        "dob": {
+          "date": "1985-10-28T02:16:59.970Z",
+          "age": 39
+        },
+        "registered": {
+          "date": "2011-01-19T15:22:55.910Z",
+          "age": 14
+        },
+        "phone": "55189963",
+        "cell": "87618786",
+        "id": {
+          "name": "CPR",
+          "value": "271085-1527"
+        },
+        "picture": {
+          "large": "https://randomuser.me/api/portraits/women/63.jpg",
+          "medium": "https://randomuser.me/api/portraits/med/women/63.jpg",
+          "thumbnail": "https://randomuser.me/api/portraits/thumb/women/63.jpg"
+        },
+        "nat": "DK"
+      }
+    ],
+    "info": {
+      "seed": "aa488deb5cb0cca9",
+      "results": 1,
+      "page": 1,
+      "version": "1.4"
+    }
+  }

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Fetch API</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+<body>
+  <h1>Fetch Example 1 </h1>
+  <p id="output1">Random user name: email</p>
+  <button onclick="getUser()">Get External User from API</button>
+  
+  <h1>Fetch Example 2 </h1>
+  <p id="output2">Random joke: punchline</p>
+  <button onclick="getJoke()">Get External Joke from API</button>
+  
+  <script>
+    // Example 1
+    async function getUser() {
+      const url = "https://randomuser.me/api";
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`Response status: ${response.status}`);
+        }
+    
+        const json = await response.json();
+        const myOutput = document.getElementById("output1");
+        myOutput.innerText = json.results[0].name.first + ": " + json.results[0].email; // Access the 'first' name and email
+        console.log(json); // Log the full response for debugging
+      } catch (error) {
+        console.error(error.message);
+      }
+    }
+
+    // Example 2
+    async function getJoke() {
+        let url = "https://official-joke-api.appspot.com/random_joke";
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`Response status: ${response.status}`);
+            }
+            
+            const joke = await response.json(); // Wait for the JSON response
+            const myOutput = document.getElementById("output2");
+            myOutput.innerText = joke.setup + ": " + joke.punchline; // Access the 'setup' and 'punchline'
+        } catch (error) {
+            console.error(error.message);
+        }
+    }
+  </script>
+</body>
+</html>

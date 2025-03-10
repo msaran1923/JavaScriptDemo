@@ -1,34 +1,3 @@
-
-const statusDisplayElement = document.getElementById('statusDisplay');
-
-function addTask() {
-    // Get input value
-    const taskText = document.getElementById("taskInput").value;
-    if (taskText === "") return;
-
-    // Create new list item
-    const li = document.createElement("li");
-    li.textContent = taskText;
-    li.className = "task"; // Add styling via class
-
-    // Append to the list
-    document.getElementById("taskList").appendChild(li);
-
-    // Clear input
-    document.getElementById("taskInput").value = "";
-  }
-
-function changeStatus(){
-    const currentStatus = "System: Online, CPU Load: 25%, Memory Usage: 60%";
-    statusDisplayElement.textContent = "Current Status: " + currentStatus;
-}
-
-function loadSetup(){
-    // Simulate fetching status after 2 seconds
-    setTimeout(changeStatus(), 2000); // 2000 milliseconds = 2 seconds
-}
-
-
 // Create random sensor data
 function getSensorData() {
     return {
@@ -36,9 +5,6 @@ function getSensorData() {
         humidity: (Math.random() * 40 + 30).toFixed(1)     // 30-70%
     };
 }
-
-// Fetch data every 2 seconds (simulated)
-setInterval(updateDashboard, 2000);
 
 // For real data, replace with:
 // async function getSensorData() {
@@ -49,19 +15,26 @@ setInterval(updateDashboard, 2000);
 function updateDashboard() {
     const data = getSensorData();
 
-    // Update temperature
+    // Update temperature card
     const tempValue = document.getElementById('temp-value');
+    const tempCard = document.getElementById('temp-card');
     const tempStatus = document.getElementById('temp-status');
-    tempValue.textContent = data.temperature;
-    tempStatus.style.backgroundColor = (data.temperature > 25) ? 'red' : 'green';
-
-    // Update humidity
-    const humidityValue = document.getElementById('humidity-value');
-    const humidityStatus = document.getElementById('humidity-status');
-    humidityValue.textContent = data.humidity;
-    humidityStatus.style.backgroundColor = (data.humidity > 50) ? 'red' : 'green';
     
-    // Update chart (see next step)
+    tempValue.textContent = data.temperature;
+    tempCard.className = 'card mb-3';
+    tempCard.classList.add(data.temperature > 25 ? 'text-bg-danger' : 'text-bg-success');
+    tempStatus.textContent = data.temperature > 25 ? 'High Temperature' : 'Normal Temperature';
+
+    // Update humidity card
+    const humidityValue = document.getElementById('humidity-value');
+    const humidityCard = document.getElementById('humidity-card');
+    const humidityStatus = document.getElementById('humidity-status');
+    
+    humidityValue.textContent = data.humidity;
+    humidityCard.className = 'card mb-3';
+    humidityCard.classList.add(data.humidity > 50 ? 'text-bg-danger' : 'text-bg-success');
+    humidityStatus.textContent = data.humidity > 50 ? 'High Humidity' : 'Normal Humidity';
+
     updateChart(data);
 }
 
@@ -111,5 +84,6 @@ function updateChart(data) {
     sensorChart.update();
 }
 
-// Start the dashboard
+// Start the dashboard and set interval
 updateDashboard();
+setInterval(updateDashboard, 2000);
