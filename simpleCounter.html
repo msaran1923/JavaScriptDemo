@@ -1,0 +1,42 @@
+<!--Exercise simple counter-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Simple counter</title>
+</head>
+<body>
+    <h1>Simple counter</h1>
+    <div id="counterApp">
+        <h3 id="counterTitle">Counter</h3>
+        <p id="counterValue">0</p>
+        <button id="incrementBtn">Increment</button>
+        <div id="logContainer"></div>
+    </div>
+    <script>
+        // Get all the elements
+        const titleElement = document.getElementById('counterTitle');
+        const valueElement = document.getElementById('counterValue');
+        const buttonElement = document.getElementById('incrementBtn');
+        const logElement = document.getElementById('logContainer');
+
+        // Set initial state
+        titleElement.textContent = "My Amazing Counter";
+        let count = 0;
+
+        // Add event listener to button
+        buttonElement.addEventListener('click', () => {
+        // Increment count
+        count++;
+        
+        // Update the counter display with textContent
+        valueElement.textContent = count;
+        
+        // Log the action with innerHTML
+        const timestamp = new Date().toLocaleTimeString();
+        logElement.innerHTML += `<p><small>${timestamp}:</small> Counter increased to <b>${count}</b></p>`;
+        });
+    </script>
+</body>
+</html>

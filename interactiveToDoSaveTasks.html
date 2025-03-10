@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Interactive ToDo List</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+</head>
+<body class="bg-light">
+  <div class="container mt-5">
+    <h1 class="text-center mb-4">Interactive ToDo List</h1>
+    
+    <div class="card shadow">
+      <div class="card-body">
+        <div id="todoApp">
+          <div class="d-flex justify-content-between mb-4">
+            <h2 class="card-title">Todo List</h2>
+            <div class="btn-group">
+              <button type="button" class="btn btn-sm btn-outline-secondary" id="exportBtn">
+                <i class="bi bi-download"></i> Export
+              </button>
+              <input type="file" id="importInput" hidden accept=".json">
+              <button type="button" class="btn btn-sm btn-outline-secondary" id="importBtn">
+                <i class="bi bi-upload"></i> Import
+              </button>
+            </div>
+          </div>
+
+          <form id="todoForm" class="mb-4">
+            <div class="input-group">
+              <input type="text" 
+                     id="todoInput" 
+                     class="form-control" 
+                     placeholder="Add a task"
+                     aria-label="Add a task"
+                     required>
+              <button type="submit" class="btn btn-primary">
+                <i class="bi bi-plus-lg"></i> Add Task
+              </button>
+            </div>
+          </form>
+
+          <div class="table-responsive">
+            <table class="table table-striped table-hover align-middle">
+              <thead class="table-light">
+                <tr>
+                  <th scope="col">Task</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="todoList">
+                <!-- Todo items will be inserted here -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Retrieve tasks from localStorage or start with an empty array.
+    let tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+  
+    // Save tasks to localStorage and re-render the table.
+    function saveTasks() {
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+      renderTasks();
+    }
+  
+    // Render tasks into the table.
+    function renderTasks() {
+      const todoList = document.getElementById('todoList');
+      todoList.innerHTML = '';
+      tasks.forEach((task, index) => {
+        const row = document.createElement('tr');
+        
+        // Task description cell
+        const taskCell = document.createElement('td');
+        taskCell.textContent = task.description || 'No description';
+        
+        // Task status cell
+        const statusCell = document.createElement('td');
+        statusCell.textContent = task.status || 'Pending';
+        
+        // Actions cell: Edit, Approve, and Delete buttons
+        const actionsCell = document.createElement('td');
+  
+        // Edit button
+        const editBtn = document.createElement('button');
+        editBtn.textContent = 'Edit';
+        editBtn.className = 'btn btn-warning btn-sm me-1';
+        editBtn.addEventListener('click', () => {
+          const newDescription = prompt('Edit task:', task.description);
+          if (newDescription !== null && newDescription.trim() !== '') {
+            tasks[index].description = newDescription;
+            saveTasks();
+          }
+        });
+        actionsCell.appendChild(editBtn);
+  
+        // Approve button
+        const approveBtn = document.createElement('button');
+        approveBtn.textContent = 'Approve';
+        approveBtn.className = 'btn btn-success btn-sm me-1';
+        approveBtn.addEventListener('click', () => {
+          tasks[index].status = 'Approved';
+          saveTasks();
+        });
+        actionsCell.appendChild(approveBtn);
+  
+        // Delete button
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = 'Delete';
+        deleteBtn.className = 'btn btn-danger btn-sm';
+        deleteBtn.addEventListener('click', () => {
+          tasks.splice(index, 1);
+          saveTasks();
+        });
+        actionsCell.appendChild(deleteBtn);
+        
+        // Append cells to the row
+        row.appendChild(taskCell);
+        row.appendChild(statusCell);
+        row.appendChild(actionsCell);
+        
+        // Append row to the table body
+        todoList.appendChild(row);
+      });
+    }
+  
+    // Export tasks to a JSON file.
+    function exportTasks() {
+      try {
+        const data = JSON.stringify(tasks, null, 2);
+        const blob = new Blob([data], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'myTasks.json';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      } catch (error) {
+        console.error('Export failed:', error);
+        alert('Error exporting tasks');
+      }
+    }
+  
+    // Handle the import of a JSON file.
+    function handleFileImport(file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const imported = JSON.parse(e.target.result);
+          if (Array.isArray(imported)) {
+            tasks = imported;
+            saveTasks();
+            alert('Tasks imported successfully!');
+          } else {
+            throw new Error('Invalid file format');
+          }
+        } catch (error) {
+          console.error('Import failed:', error);
+          alert('Invalid JSON file format');
+        }
+      };
+      reader.readAsText(file);
+    }
+  
+    // Set up event listeners once the document is loaded.
+    document.addEventListener('DOMContentLoaded', () => {
+      renderTasks();
+  
+      // Handle form submission to add a new task.
+      document.getElementById('todoForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const todoInput = document.getElementById('todoInput');
+        const newTask = { description: todoInput.value, status: 'Pending' };
+        tasks.push(newTask);
+        saveTasks();
+        todoInput.value = '';
+      });
+  
+      // Export tasks when the export button is clicked.
+      document.getElementById('exportBtn').addEventListener('click', exportTasks);
+  
+      // Trigger file input when the import button is clicked.
+      document.getElementById('importBtn').addEventListener('click', () => {
+        document.getElementById('importInput').click();
+      });
+  
+      // Handle file selection for import.
+      document.getElementById('importInput').addEventListener('change', (e) => {
+        const files = e.target.files;
+        if (files.length > 0) {
+          handleFileImport(files[0]);
+        }
+      });
+    });
+  </script>
+    <script src="interactiveToDoFormatted.js"></script>
+</body>
+</html>
