@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sensor Dashboard</title>
+    <style>
+        .sensor-card { border: 1px solid #ccc; padding: 10px; margin: 5px; display: inline-block; }
+        .status-indicator { width: 20px; height: 20px; border-radius: 50%; display: inline-block; }
+    </style>
+</head>
+<body>
+    <h1>Real-time Sensor Dashboard</h1>
+    <div id="sensor-container">
+        <div class="sensor-card">
+            <h3>Temperature</h3>
+            <p>Value: <span id="temp-value">Loading...</span> °C</p>
+            <div class="status-indicator" id="temp-status"></div>
+        </div>
+        <div class="sensor-card">
+            <h3>Humidity</h3>
+            <p>Value: <span id="humidity-value">Loading...</span> %</p>
+            <div class="status-indicator" id="humidity-status"></div>
+        </div>
+    </div>
+    <canvas id="sensor-chart" width="400" height="200"></canvas>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
